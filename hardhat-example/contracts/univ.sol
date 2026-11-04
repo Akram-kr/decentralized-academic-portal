@@ -34,7 +34,7 @@ contract UniversityDiploma is ERC721, AccessControl, ReentrancyGuard {
     
     // Grades stored as uint16 scaled ×100 (e.g., 10.00 stored as 1000)
     uint16  public constant PASS_GRADE       = 1000;
-    uint16  public constant REQUIRED_CREDITS = 180;
+    uint16  public constant EXPECTED_CREDITS = 180;
 
     bytes32 public constant ADMIN_ROLE  = keccak256("ADMIN_ROLE");
     bytes32 public constant DEAN_ROLE   = keccak256("DEAN_ROLE");
@@ -161,9 +161,7 @@ contract UniversityDiploma is ERC721, AccessControl, ReentrancyGuard {
 
         for (uint256 i = 0; i < inputs.length; i++) {
             StudentEntry calldata s = inputs[i];
-            
-            // 🚨 AUTOMATED SMART CONTRACT RULES ENFORCEMENT
-            if (s.totalCredits != REQUIRED_CREDITS) revert Rule_InsufficientCredits(s.matricule, s.totalCredits);
+            if (s.totalCredits < EXPECTED_CREDITS) revert Rule_InsufficientCredits(s.matricule, s.totalCredits);
             if (s.pfeNote < PASS_GRADE) revert Rule_FailedPFE(s.matricule, s.pfeNote);
             if (_matriculeUsed[s.matricule]) revert Batch_MatriculeAlreadyMinted(s.matricule);
 

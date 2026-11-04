@@ -86,7 +86,8 @@ export const StudentScalarFieldEnum = {
   graduationYear: 'graduationYear',
   currentYear: 'currentYear',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  speciality: 'speciality'
 } as const
 
 export type StudentScalarFieldEnum = (typeof StudentScalarFieldEnum)[keyof typeof StudentScalarFieldEnum]

@@ -1,11 +1,13 @@
 import puppeteer from "puppeteer";
+import QRCode from "qrcode";
 
 export interface DiplomaTemplateData {
   batchId: string;
   studentName: string;
-  deplome: "Master" | "Licence";
+  deplome: "Master" | "License";
   matricule: string;
   department: string;
+  speciality: "AI" | "SIQ" | "ISIL" | "Reseau";
   graduationYear: number;
   totalCredits: number;
   pfeNote: number;
@@ -111,7 +113,9 @@ const LOGO_URI = `data:image/svg+xml;base64,${Buffer.from(LOGO_SVG).toString("ba
 
 // ─── HTML builder ─────────────────────────────────────────────────────────────
 
-export function buildDiplomaHtml(data: DiplomaTemplateData): string {
+export async function buildDiplomaHtml(
+  data: DiplomaTemplateData,
+): Promise<string> {
   const issueDate = data.issueDate ?? new Date().toISOString().slice(0, 10);
   const universityName =
     data.universityName ?? "Université Saad Dahleb — Blida 1";
@@ -122,7 +126,9 @@ export function buildDiplomaHtml(data: DiplomaTemplateData): string {
   const degreeAr =
     data.deplome === "Master" ? "شهادة الماستر" : "شهادة الليسانس";
   const degreeFr = `Diplôme de ${data.deplome}`;
-
+  const qrDataUrl = await QRCode.toDataURL(
+    `http://localhost:3000/verify/${data.matricule}`,
+  );
   // Build grade rows
   const gradeRows: [string, string][] = [
     ["Première année Licence (L1)", formatAverage(data.l1Average)],
@@ -397,7 +403,7 @@ export function buildDiplomaHtml(data: DiplomaTemplateData): string {
     Le Recteur de l'<strong>${universityName}</strong> certifie que
     <strong>M./Mme ${data.studentName}</strong>, portant le numéro matricule
     <strong class="mono">${data.matricule}</strong>, inscrit(e) au département de
-    <em>${data.department}</em>, a accompli avec succès l'ensemble des exigences académiques
+    <em>${data.department}</em> speciality <em>${data.speciality}</em>, a accompli avec succès l'ensemble des exigences académiques
     du parcours <strong>${data.deplome}</strong> et est déclaré(e) titulaire dudit diplôme
     au titre de l'année universitaire
     <strong>${data.graduationYear - 1} / ${data.graduationYear}</strong>,
@@ -419,13 +425,14 @@ export function buildDiplomaHtml(data: DiplomaTemplateData): string {
   </table>
 
   <!-- blockchain authenticity -->
+
   <div class="chain-box">
-    <div class="chain-label">&#x1F517; Authentification DiploChain — Lot #${data.batchId}</div>
+    <div class="chain-label">🔗 Authentification DiploChain — Lot #${data.batchId}</div>
     <b>Doyen :</b> <span class="mono">${data.deanAddress}</span><br/>
     <b>Recteur :</b> <span class="mono">${data.rectorAddress}</span><br/>
-    <b>CID IPFS :</b> <span class="mono" style="color:#aaa;">à insérer après upload</span>
     &nbsp;|&nbsp; <b>Date d'émission :</b> ${issueDate}
-  </div>
+    </div>
+    <img src="${qrDataUrl}" width="100" height="100" alt="QR Code" />
 
   <!-- signatures -->
   <div class="sig-row">

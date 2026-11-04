@@ -6,12 +6,13 @@ import { shortenAddress } from "@/lib/utils";
 import { useState, useEffect } from "react";
 
 export function WalletButton() {
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, isConnecting, isReconnecting } = useAccount();
   const { connect, connectors } = useConnect();
   const { disconnect } = useDisconnect();
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+
+  // useEffect(() => setMounted(true), []);
 
   if (isConnected && address) {
     return (
@@ -44,14 +45,23 @@ export function WalletButton() {
       </div>
     );
   }
-  if (!mounted) return null;
+  // if (!mounted) return null;
   return (
     <button
       onClick={() => connect({ connector: connectors[0] })}
       className="btn-primary text-xs"
     >
-      <Wallet className="h-4 w-4" />
-      Connecter wallet
+      {isConnecting || isReconnecting ? (
+        <span className="flex items-center gap-2">
+          <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-500 border-t-transparent" />
+          Connecting...
+        </span>
+      ) : (
+        <>
+          <Wallet className="h-4 w-4" />
+          Connecter wallet
+        </>
+      )}
     </button>
   );
 }

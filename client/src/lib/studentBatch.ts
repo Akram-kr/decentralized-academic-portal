@@ -6,6 +6,7 @@ export interface StudentBatchProfile {
   matricule: string;
   wallet: string;
   studentName: string;
+  speciality: "AI" | "SIQ" | "ISIL" | "Reseau";
   department: string;
   graduationYear: number;
   totalCredits: number;
@@ -112,6 +113,7 @@ export async function getStudentBatchProfile(
     wallet: student.wallet,
     studentName: `${student.firstName} ${student.lastName}`.trim(),
     department: student.department ?? "Informatique",
+    speciality: student.speciality ?? "SIQ",
     graduationYear:
       student.graduationYear ??
       deriveGraduationYear(latestAnnualAverage?.academicYear ?? null),

@@ -21,7 +21,7 @@ interface SessionForm {
   matricule: string;
   name: string;
   pfeTitle: string;
-  specialty: string;
+  specialty: "AI" | "SIQ" | "ISIL" | "Reseau" | "";
   academicYear: string;
   president: string;
   promoteur: string;
@@ -126,7 +126,7 @@ export function InitializeDeliberationForm({ onSuccess }: Props) {
       updateField("specialty", "");
       updateField("academicYear", "");
       setFetchingError(
-        "Le matricule est requis pour charger le profil étudiant.",
+        "The matricule is required to load the student profile.",
       );
       return;
     }
@@ -135,13 +135,13 @@ export function InitializeDeliberationForm({ onSuccess }: Props) {
       const profile = await getStudentBatchProfile(normalizedMatricule);
 
       if (!profile) {
-        throw new Error("Aucun étudiant trouvé pour ce matricule.");
+        throw new Error("no student found for this matricule.");
       }
 
       // Update the form with the retrieved profile data
       updateField("matricule", profile.matricule);
       updateField("name", profile.studentName);
-      updateField("specialty", profile.department);
+      updateField("specialty", profile.speciality);
       updateField("academicYear", profile.currentYear);
 
       setFetchingError("");
@@ -150,7 +150,7 @@ export function InitializeDeliberationForm({ onSuccess }: Props) {
       setFetchingError(
         error instanceof Error
           ? error.message
-          : "Impossible de charger le profil étudiant.",
+          : "failed to load student profile.",
       );
     }
   };
@@ -160,18 +160,18 @@ export function InitializeDeliberationForm({ onSuccess }: Props) {
     setError(null);
     setIsPending(true);
     if (!deliberationAddress) {
-      setError("Adresse du contrat de délibération non configurée.");
+      setError("Address of the deliberation contract is not configured.");
       return;
     }
 
     if (!address) {
-      setError("Connectez votre wallet pour initialiser une session.");
+      setError("Connect your wallet to initialize a session.");
       return;
     }
 
     if (!isAdmin) {
       setError(
-        "Ce wallet n’a pas le rôle ADMIN sur le contrat de délibération.",
+        "This wallet does not have the ADMIN role on the deliberation contract.",
       );
       return;
     }
@@ -186,12 +186,12 @@ export function InitializeDeliberationForm({ onSuccess }: Props) {
     ];
 
     if (requiredFields.some((value) => !value.trim())) {
-      setError("Tous les champs sont requis.");
+      setError("All fields are required.");
       return;
     }
 
     if (invalidJuryAddresses.length > 0) {
-      setError("Une ou plusieurs adresses du jury sont invalides.");
+      setError("One or more jury addresses are invalid.");
       return;
     }
     // ####################
@@ -225,9 +225,9 @@ export function InitializeDeliberationForm({ onSuccess }: Props) {
         err.shortMessage ||
         (err.message
           ? err.message.split("\n")[0]
-          : "L'initialisation de la session a échoué.");
+          : "Failed to initialize the session.");
 
-      setError(`Échec : ${cleanMessage}`);
+      setError(`Failed : ${cleanMessage}`);
       setIsPending(false);
     }
   };
@@ -236,18 +236,18 @@ export function InitializeDeliberationForm({ onSuccess }: Props) {
     <form onSubmit={handleSubmit} className="space-y-6">
       {!deliberationAddress && (
         <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">
-          Le contrat de délibération n’est pas configuré. Ajoutez la variable
+          The deliberation contract is not configured. Add the variable
           <span className="mx-1 font-mono">
             NEXT_PUBLIC_DELIBERATION_CONTRACT_ADDRESS
           </span>
-          dans votre environnement.
+          to your environment.
         </div>
       )}
 
       {!isAdmin && Boolean(address) && (
         <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700">
-          Ce wallet n’est pas autorisé à initialiser une session de
-          délibération.
+          this wallet address does not have permission to initialize a
+          deliberation session. Please connect with an admin wallet.
         </div>
       )}
 
@@ -265,8 +265,8 @@ export function InitializeDeliberationForm({ onSuccess }: Props) {
               required
             />
             <p className="mt-1 text-[11px] text-slate-500">
-              Le profil étudiant est chargé depuis Progress après validation du
-              matricule.
+              Enter the student&apos;s matricule to auto-fill their profile
+              details.
             </p>
           </div>
           <div>
@@ -284,7 +284,7 @@ export function InitializeDeliberationForm({ onSuccess }: Props) {
           {/* 1. Nom Complet */}
           <div className="flex-1 min-w-0">
             <p className="text-[11px] uppercase tracking-wide text-slate-400 whitespace-nowrap">
-              Nom complet
+              full name
             </p>
             <p className="font-medium text-slate-800 truncate">
               {form.name || "_"}
@@ -294,7 +294,7 @@ export function InitializeDeliberationForm({ onSuccess }: Props) {
           {/* 2. Spécialité */}
           <div className="flex-1 min-w-0">
             <p className="text-[11px] uppercase tracking-wide text-slate-400 whitespace-nowrap">
-              Spécialité
+              specialty
             </p>
             <p className="font-medium text-slate-800 truncate">
               {form.specialty || "_"}
@@ -304,7 +304,7 @@ export function InitializeDeliberationForm({ onSuccess }: Props) {
           {/* 3. Année de promotion */}
           <div className="shrink-0 ">
             <p className="text-[11px] uppercase tracking-wide text-slate-400 whitespace-nowrap">
-              Année de promotion
+              academic year
             </p>
 
             <p className="font-medium text-slate-800">
@@ -323,10 +323,10 @@ export function InitializeDeliberationForm({ onSuccess }: Props) {
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           {(
             [
-              { key: "president", label: "Président" },
-              { key: "promoteur", label: "Promoteur" },
-              { key: "examinateur1", label: "Examinateur 1" },
-              { key: "examinateur2", label: "Examinateur 2" },
+              { key: "president", label: "President" },
+              { key: "promoteur", label: "Promoter" },
+              { key: "examinateur1", label: "Examiner 1" },
+              { key: "examinateur2", label: "Examiner 2" },
             ] as const
           ).map(({ key, label }) => {
             const value = form[key];
@@ -346,7 +346,7 @@ export function InitializeDeliberationForm({ onSuccess }: Props) {
                   placeholder="0x..."
                 />
                 {invalid && (
-                  <p className="text-xs text-red-500">Adresse invalide.</p>
+                  <p className="text-xs text-red-500">Invalid address.</p>
                 )}
               </label>
             );
@@ -368,7 +368,7 @@ export function InitializeDeliberationForm({ onSuccess }: Props) {
           ) : (
             <>
               <Send className="h-4 w-4" />
-              Initialiser la session
+              Initialize Session
             </>
           )}
         </button>
@@ -380,7 +380,7 @@ export function InitializeDeliberationForm({ onSuccess }: Props) {
       )}
       {isSuccess && txHash && (
         <div className="rounded-lg border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-800">
-          Session initialisée avec succès. Transaction : {txHash}
+          Session initialized successfully. Transaction: {txHash}
         </div>
       )}
     </form>

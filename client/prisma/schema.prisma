@@ -20,7 +20,7 @@ model Student {
   currentYear    YearLevel    @default(L1) // Tracks if student is currently L1, L2, or L3
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
-
+  speciality     Speciality
   // Relations
   enrollments    Enrollment[]
   transcripts    Transcript[] 
@@ -101,7 +101,12 @@ enum YearLevel {
   M1 
   M2
 }
-
+enum Speciality {
+  SIQ
+  ISIL
+  AI 
+  Reseau
+}
 enum Semester {
   S1
   S2

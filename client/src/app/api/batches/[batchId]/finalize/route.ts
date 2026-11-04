@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { parseAbiItem } from "viem";
 import { publicClient } from "@/lib/contract";
-import { pinFileToIPFS } from "@/lib/pinata";
+import { pinFileToIPFS, pinMetadataToIPFS } from "@/lib/pinata";
 import { buildDiplomaHtml, renderDiplomaPdfBuffer } from "@/lib/diplomaPdf";
 import { getStudentBatchProfile } from "@/lib/studentBatch";
 import type { BatchDraftStudent } from "@/lib/batchDraft";
@@ -45,7 +45,7 @@ export async function POST(
 
   if (!Array.isArray(students) || students.length === 0) {
     return NextResponse.json(
-      { error: "Aucune donnée d'étudiant à finaliser." },
+      { error: "No student data to finalize." },
       { status: 400 },
     );
   }
@@ -75,7 +75,7 @@ export async function POST(
 
     if (!deanLog?.args.dean || !rectorLog?.args.rector) {
       return NextResponse.json(
-        { error: "Les signatures du lot sont introuvables." },
+        { error: "Missing signatures." },
         { status: 409 },
       );
     }
@@ -86,16 +86,19 @@ export async function POST(
     const cids = await Promise.all(
       students.map(async (student) => {
         const profile = await getStudentBatchProfile(student.matricule);
-        const deplome = profile?.currentYear === "M2" ? "Master" : "Licence";
+        const deplome = profile?.currentYear === "M2" ? "Master" : "License";
         if (!profile) {
-          throw new Error(`Étudiant introuvable : ${student.matricule}`);
+          throw new Error(
+            `Profile not found for student: ${student.matricule}`,
+          );
         }
 
-        const html = buildDiplomaHtml({
+        const html = await buildDiplomaHtml({
           batchId: batchIdBigInt.toString(),
           studentName: profile.studentName,
           deplome: deplome,
           matricule: profile.matricule,
+          speciality: profile.speciality,
           department: profile.department,
           graduationYear: profile.graduationYear,
           totalCredits: profile.totalCredits,
@@ -108,15 +111,37 @@ export async function POST(
           deanAddress: deanAddress,
           rectorAddress: rectorAddress,
         });
-
         const pdfBuffer = await renderDiplomaPdfBuffer(html);
         const fileName = `diplome_${profile.matricule}_${batchIdBigInt.toString()}.pdf`;
 
-        return pinFileToIPFS(
+        // 1. Pin the PDF file
+        const diplomaPdfCID = await pinFileToIPFS(
           toArrayBuffer(pdfBuffer),
           fileName,
           "application/pdf",
         );
+
+        // 2. Build the metadata object
+        const metadata = {
+          studentName: profile.studentName,
+          matricule: profile.matricule,
+          department: profile.department,
+          speciality: profile.speciality,
+          graduationYear: profile.graduationYear,
+          deplome,
+          batchId: batchIdBigInt.toString(),
+          deanAddress,
+          rectorAddress,
+          diplomaPdfCID, // link to the PDF
+        };
+
+        // 3. Pin the metadata JSON
+        const metadataCID = await pinMetadataToIPFS(
+          metadata,
+          `metadata_${profile.matricule}_${batchIdBigInt.toString()}`,
+        );
+
+        return diplomaPdfCID;
       }),
     );
 

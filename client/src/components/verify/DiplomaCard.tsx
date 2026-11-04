@@ -71,7 +71,7 @@ export function DiplomaCard({ tokenId, owner, record }: DiplomaCardProps) {
             ) : (
               <ShieldX className="h-5 w-5" />
             )}
-            {isValid ? "Authentique" : "Révoqué"}
+            {isValid ? "Authentic" : "Revoked"}
           </div>
         </div>
       </div>
@@ -80,11 +80,11 @@ export function DiplomaCard({ tokenId, owner, record }: DiplomaCardProps) {
         <div className="rounded-lg border border-red-200 bg-red-50 p-3 space-y-1">
           <div className="flex items-center gap-2 text-sm font-semibold text-red-700">
             <ShieldAlert className="h-4 w-4 shrink-0" />
-            Ce diplôme a été révoqué par l&apos;administration universitaire.
+            This diploma has been revoked by the university administration.
           </div>
           {record.revocationReason && (
             <p className="text-xs text-red-600 pl-6">
-              Motif : {record.revocationReason}
+              Reason : {record.revocationReason}
             </p>
           )}
         </div>
@@ -94,7 +94,7 @@ export function DiplomaCard({ tokenId, owner, record }: DiplomaCardProps) {
         <InfoRow icon={IdCard} label="Matricule" value={record.matricule} />
         <InfoRow
           icon={Building2}
-          label="Département"
+          label="Department"
           value={record.department}
         />
         <InfoRow
@@ -102,22 +102,22 @@ export function DiplomaCard({ tokenId, owner, record }: DiplomaCardProps) {
           label="Promotion"
           value={String(record.graduationYear)}
         />
-        <InfoRow icon={Award} label="PFE" value={pfeLabel} />
+        <InfoRow icon={Award} label="Final Project Note" value={pfeLabel} />
         <InfoRow
           icon={Calendar}
-          label="Date d'émission"
+          label="Date of Issue"
           value={formatTimestamp(record.mintedAt)}
         />
         <InfoRow
           icon={FileText}
-          label="Lot"
+          label="Batch"
           value={`#${record.batchId.toString()}`}
         />
       </div>
 
       <div className="rounded-lg border border-slate-200 bg-white p-4 space-y-2">
         <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-2">
-          Données blockchain immuables
+          blockcahin data
         </p>
         <DataRow label="Propriétaire" value={owner} mono />
         <DataRow label="CID IPFS du PDF" value={record.ipfsCID} mono />
@@ -132,7 +132,7 @@ export function DiplomaCard({ tokenId, owner, record }: DiplomaCardProps) {
           className="btn-secondary text-xs"
         >
           <ExternalLink className="h-3.5 w-3.5" />
-          Ouvrir le PDF
+          Open PDF
         </a>
       </div>
     </div>

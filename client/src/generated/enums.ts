@@ -29,6 +29,16 @@ export const YearLevel = {
 export type YearLevel = (typeof YearLevel)[keyof typeof YearLevel]
 
 
+export const Speciality = {
+  SIQ: 'SIQ',
+  ISIL: 'ISIL',
+  AI: 'AI',
+  Reseau: 'Reseau'
+} as const
+
+export type Speciality = (typeof Speciality)[keyof typeof Speciality]
+
+
 export const Semester = {
   S1: 'S1',
   S2: 'S2',

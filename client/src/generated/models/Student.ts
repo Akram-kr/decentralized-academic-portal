@@ -47,6 +47,7 @@ export type StudentMinAggregateOutputType = {
   currentYear: $Enums.YearLevel | null
   createdAt: Date | null
   updatedAt: Date | null
+  speciality: $Enums.Speciality | null
 }
 
 export type StudentMaxAggregateOutputType = {
@@ -62,6 +63,7 @@ export type StudentMaxAggregateOutputType = {
   currentYear: $Enums.YearLevel | null
   createdAt: Date | null
   updatedAt: Date | null
+  speciality: $Enums.Speciality | null
 }
 
 export type StudentCountAggregateOutputType = {
@@ -77,6 +79,7 @@ export type StudentCountAggregateOutputType = {
   currentYear: number
   createdAt: number
   updatedAt: number
+  speciality: number
   _all: number
 }
 
@@ -102,6 +105,7 @@ export type StudentMinAggregateInputType = {
   currentYear?: true
   createdAt?: true
   updatedAt?: true
+  speciality?: true
 }
 
 export type StudentMaxAggregateInputType = {
@@ -117,6 +121,7 @@ export type StudentMaxAggregateInputType = {
   currentYear?: true
   createdAt?: true
   updatedAt?: true
+  speciality?: true
 }
 
 export type StudentCountAggregateInputType = {
@@ -132,6 +137,7 @@ export type StudentCountAggregateInputType = {
   currentYear?: true
   createdAt?: true
   updatedAt?: true
+  speciality?: true
   _all?: true
 }
 
@@ -234,6 +240,7 @@ export type StudentGroupByOutputType = {
   currentYear: $Enums.YearLevel
   createdAt: Date
   updatedAt: Date
+  speciality: $Enums.Speciality
   _count: StudentCountAggregateOutputType | null
   _avg: StudentAvgAggregateOutputType | null
   _sum: StudentSumAggregateOutputType | null
@@ -272,6 +279,7 @@ export type StudentWhereInput = {
   currentYear?: Prisma.EnumYearLevelFilter<"Student"> | $Enums.YearLevel
   createdAt?: Prisma.DateTimeFilter<"Student"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Student"> | Date | string
+  speciality?: Prisma.EnumSpecialityFilter<"Student"> | $Enums.Speciality
   enrollments?: Prisma.EnrollmentListRelationFilter
   transcripts?: Prisma.TranscriptListRelationFilter
   annualAverages?: Prisma.AnnualAverageListRelationFilter
@@ -290,6 +298,7 @@ export type StudentOrderByWithRelationInput = {
   currentYear?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  speciality?: Prisma.SortOrder
   enrollments?: Prisma.EnrollmentOrderByRelationAggregateInput
   transcripts?: Prisma.TranscriptOrderByRelationAggregateInput
   annualAverages?: Prisma.AnnualAverageOrderByRelationAggregateInput
@@ -311,6 +320,7 @@ export type StudentWhereUniqueInput = Prisma.AtLeast<{
   currentYear?: Prisma.EnumYearLevelFilter<"Student"> | $Enums.YearLevel
   createdAt?: Prisma.DateTimeFilter<"Student"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Student"> | Date | string
+  speciality?: Prisma.EnumSpecialityFilter<"Student"> | $Enums.Speciality
   enrollments?: Prisma.EnrollmentListRelationFilter
   transcripts?: Prisma.TranscriptListRelationFilter
   annualAverages?: Prisma.AnnualAverageListRelationFilter
@@ -329,6 +339,7 @@ export type StudentOrderByWithAggregationInput = {
   currentYear?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  speciality?: Prisma.SortOrder
   _count?: Prisma.StudentCountOrderByAggregateInput
   _avg?: Prisma.StudentAvgOrderByAggregateInput
   _max?: Prisma.StudentMaxOrderByAggregateInput
@@ -352,6 +363,7 @@ export type StudentScalarWhereWithAggregatesInput = {
   currentYear?: Prisma.EnumYearLevelWithAggregatesFilter<"Student"> | $Enums.YearLevel
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Student"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Student"> | Date | string
+  speciality?: Prisma.EnumSpecialityWithAggregatesFilter<"Student"> | $Enums.Speciality
 }
 
 export type StudentCreateInput = {
@@ -367,6 +379,7 @@ export type StudentCreateInput = {
   currentYear?: $Enums.YearLevel
   createdAt?: Date | string
   updatedAt?: Date | string
+  speciality: $Enums.Speciality
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
   transcripts?: Prisma.TranscriptCreateNestedManyWithoutStudentInput
   annualAverages?: Prisma.AnnualAverageCreateNestedManyWithoutStudentInput
@@ -385,6 +398,7 @@ export type StudentUncheckedCreateInput = {
   currentYear?: $Enums.YearLevel
   createdAt?: Date | string
   updatedAt?: Date | string
+  speciality: $Enums.Speciality
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
   transcripts?: Prisma.TranscriptUncheckedCreateNestedManyWithoutStudentInput
   annualAverages?: Prisma.AnnualAverageUncheckedCreateNestedManyWithoutStudentInput
@@ -403,6 +417,7 @@ export type StudentUpdateInput = {
   currentYear?: Prisma.EnumYearLevelFieldUpdateOperationsInput | $Enums.YearLevel
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  speciality?: Prisma.EnumSpecialityFieldUpdateOperationsInput | $Enums.Speciality
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
   transcripts?: Prisma.TranscriptUpdateManyWithoutStudentNestedInput
   annualAverages?: Prisma.AnnualAverageUpdateManyWithoutStudentNestedInput
@@ -421,6 +436,7 @@ export type StudentUncheckedUpdateInput = {
   currentYear?: Prisma.EnumYearLevelFieldUpdateOperationsInput | $Enums.YearLevel
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  speciality?: Prisma.EnumSpecialityFieldUpdateOperationsInput | $Enums.Speciality
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   transcripts?: Prisma.TranscriptUncheckedUpdateManyWithoutStudentNestedInput
   annualAverages?: Prisma.AnnualAverageUncheckedUpdateManyWithoutStudentNestedInput
@@ -439,6 +455,7 @@ export type StudentCreateManyInput = {
   currentYear?: $Enums.YearLevel
   createdAt?: Date | string
   updatedAt?: Date | string
+  speciality: $Enums.Speciality
 }
 
 export type StudentUpdateManyMutationInput = {
@@ -454,6 +471,7 @@ export type StudentUpdateManyMutationInput = {
   currentYear?: Prisma.EnumYearLevelFieldUpdateOperationsInput | $Enums.YearLevel
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  speciality?: Prisma.EnumSpecialityFieldUpdateOperationsInput | $Enums.Speciality
 }
 
 export type StudentUncheckedUpdateManyInput = {
@@ -469,6 +487,7 @@ export type StudentUncheckedUpdateManyInput = {
   currentYear?: Prisma.EnumYearLevelFieldUpdateOperationsInput | $Enums.YearLevel
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  speciality?: Prisma.EnumSpecialityFieldUpdateOperationsInput | $Enums.Speciality
 }
 
 export type StudentCountOrderByAggregateInput = {
@@ -484,6 +503,7 @@ export type StudentCountOrderByAggregateInput = {
   currentYear?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  speciality?: Prisma.SortOrder
 }
 
 export type StudentAvgOrderByAggregateInput = {
@@ -503,6 +523,7 @@ export type StudentMaxOrderByAggregateInput = {
   currentYear?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  speciality?: Prisma.SortOrder
 }
 
 export type StudentMinOrderByAggregateInput = {
@@ -518,6 +539,7 @@ export type StudentMinOrderByAggregateInput = {
   currentYear?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  speciality?: Prisma.SortOrder
 }
 
 export type StudentSumOrderByAggregateInput = {
@@ -555,6 +577,10 @@ export type EnumYearLevelFieldUpdateOperationsInput = {
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type EnumSpecialityFieldUpdateOperationsInput = {
+  set?: $Enums.Speciality
 }
 
 export type StudentCreateNestedOneWithoutEnrollmentsInput = {
@@ -612,6 +638,7 @@ export type StudentCreateWithoutEnrollmentsInput = {
   currentYear?: $Enums.YearLevel
   createdAt?: Date | string
   updatedAt?: Date | string
+  speciality: $Enums.Speciality
   transcripts?: Prisma.TranscriptCreateNestedManyWithoutStudentInput
   annualAverages?: Prisma.AnnualAverageCreateNestedManyWithoutStudentInput
 }
@@ -629,6 +656,7 @@ export type StudentUncheckedCreateWithoutEnrollmentsInput = {
   currentYear?: $Enums.YearLevel
   createdAt?: Date | string
   updatedAt?: Date | string
+  speciality: $Enums.Speciality
   transcripts?: Prisma.TranscriptUncheckedCreateNestedManyWithoutStudentInput
   annualAverages?: Prisma.AnnualAverageUncheckedCreateNestedManyWithoutStudentInput
 }
@@ -662,6 +690,7 @@ export type StudentUpdateWithoutEnrollmentsInput = {
   currentYear?: Prisma.EnumYearLevelFieldUpdateOperationsInput | $Enums.YearLevel
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  speciality?: Prisma.EnumSpecialityFieldUpdateOperationsInput | $Enums.Speciality
   transcripts?: Prisma.TranscriptUpdateManyWithoutStudentNestedInput
   annualAverages?: Prisma.AnnualAverageUpdateManyWithoutStudentNestedInput
 }
@@ -679,6 +708,7 @@ export type StudentUncheckedUpdateWithoutEnrollmentsInput = {
   currentYear?: Prisma.EnumYearLevelFieldUpdateOperationsInput | $Enums.YearLevel
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  speciality?: Prisma.EnumSpecialityFieldUpdateOperationsInput | $Enums.Speciality
   transcripts?: Prisma.TranscriptUncheckedUpdateManyWithoutStudentNestedInput
   annualAverages?: Prisma.AnnualAverageUncheckedUpdateManyWithoutStudentNestedInput
 }
@@ -696,6 +726,7 @@ export type StudentCreateWithoutTranscriptsInput = {
   currentYear?: $Enums.YearLevel
   createdAt?: Date | string
   updatedAt?: Date | string
+  speciality: $Enums.Speciality
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
   annualAverages?: Prisma.AnnualAverageCreateNestedManyWithoutStudentInput
 }
@@ -713,6 +744,7 @@ export type StudentUncheckedCreateWithoutTranscriptsInput = {
   currentYear?: $Enums.YearLevel
   createdAt?: Date | string
   updatedAt?: Date | string
+  speciality: $Enums.Speciality
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
   annualAverages?: Prisma.AnnualAverageUncheckedCreateNestedManyWithoutStudentInput
 }
@@ -746,6 +778,7 @@ export type StudentUpdateWithoutTranscriptsInput = {
   currentYear?: Prisma.EnumYearLevelFieldUpdateOperationsInput | $Enums.YearLevel
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  speciality?: Prisma.EnumSpecialityFieldUpdateOperationsInput | $Enums.Speciality
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
   annualAverages?: Prisma.AnnualAverageUpdateManyWithoutStudentNestedInput
 }
@@ -763,6 +796,7 @@ export type StudentUncheckedUpdateWithoutTranscriptsInput = {
   currentYear?: Prisma.EnumYearLevelFieldUpdateOperationsInput | $Enums.YearLevel
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  speciality?: Prisma.EnumSpecialityFieldUpdateOperationsInput | $Enums.Speciality
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   annualAverages?: Prisma.AnnualAverageUncheckedUpdateManyWithoutStudentNestedInput
 }
@@ -780,6 +814,7 @@ export type StudentCreateWithoutAnnualAveragesInput = {
   currentYear?: $Enums.YearLevel
   createdAt?: Date | string
   updatedAt?: Date | string
+  speciality: $Enums.Speciality
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
   transcripts?: Prisma.TranscriptCreateNestedManyWithoutStudentInput
 }
@@ -797,6 +832,7 @@ export type StudentUncheckedCreateWithoutAnnualAveragesInput = {
   currentYear?: $Enums.YearLevel
   createdAt?: Date | string
   updatedAt?: Date | string
+  speciality: $Enums.Speciality
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
   transcripts?: Prisma.TranscriptUncheckedCreateNestedManyWithoutStudentInput
 }
@@ -830,6 +866,7 @@ export type StudentUpdateWithoutAnnualAveragesInput = {
   currentYear?: Prisma.EnumYearLevelFieldUpdateOperationsInput | $Enums.YearLevel
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  speciality?: Prisma.EnumSpecialityFieldUpdateOperationsInput | $Enums.Speciality
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
   transcripts?: Prisma.TranscriptUpdateManyWithoutStudentNestedInput
 }
@@ -847,6 +884,7 @@ export type StudentUncheckedUpdateWithoutAnnualAveragesInput = {
   currentYear?: Prisma.EnumYearLevelFieldUpdateOperationsInput | $Enums.YearLevel
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  speciality?: Prisma.EnumSpecialityFieldUpdateOperationsInput | $Enums.Speciality
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   transcripts?: Prisma.TranscriptUncheckedUpdateManyWithoutStudentNestedInput
 }
@@ -913,6 +951,7 @@ export type StudentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   currentYear?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  speciality?: boolean
   enrollments?: boolean | Prisma.Student$enrollmentsArgs<ExtArgs>
   transcripts?: boolean | Prisma.Student$transcriptsArgs<ExtArgs>
   annualAverages?: boolean | Prisma.Student$annualAveragesArgs<ExtArgs>
@@ -932,6 +971,7 @@ export type StudentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   currentYear?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  speciality?: boolean
 }, ExtArgs["result"]["student"]>
 
 export type StudentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -947,6 +987,7 @@ export type StudentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   currentYear?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  speciality?: boolean
 }, ExtArgs["result"]["student"]>
 
 export type StudentSelectScalar = {
@@ -962,9 +1003,10 @@ export type StudentSelectScalar = {
   currentYear?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  speciality?: boolean
 }
 
-export type StudentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "matricule" | "firstName" | "lastName" | "email" | "dateOfBirth" | "wallet" | "department" | "graduationYear" | "currentYear" | "createdAt" | "updatedAt", ExtArgs["result"]["student"]>
+export type StudentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "matricule" | "firstName" | "lastName" | "email" | "dateOfBirth" | "wallet" | "department" | "graduationYear" | "currentYear" | "createdAt" | "updatedAt" | "speciality", ExtArgs["result"]["student"]>
 export type StudentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   enrollments?: boolean | Prisma.Student$enrollmentsArgs<ExtArgs>
   transcripts?: boolean | Prisma.Student$transcriptsArgs<ExtArgs>
@@ -994,6 +1036,7 @@ export type $StudentPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     currentYear: $Enums.YearLevel
     createdAt: Date
     updatedAt: Date
+    speciality: $Enums.Speciality
   }, ExtArgs["result"]["student"]>
   composites: {}
 }
@@ -1432,6 +1475,7 @@ export interface StudentFieldRefs {
   readonly currentYear: Prisma.FieldRef<"Student", 'YearLevel'>
   readonly createdAt: Prisma.FieldRef<"Student", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Student", 'DateTime'>
+  readonly speciality: Prisma.FieldRef<"Student", 'Speciality'>
 }
     
 

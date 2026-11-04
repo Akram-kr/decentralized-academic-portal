@@ -66,8 +66,8 @@ function RoleRow({ label, roleHash, color, onDone }: RoleRowProps) {
         ok: true,
         msg:
           action === "grantRole"
-            ? `${label} assigné avec succès.`
-            : `${label} retiré avec succès.`,
+            ? `${label} assigned successfully.`
+            : `${label} removed successfully.`,
       });
 
       setInput("");
@@ -80,11 +80,11 @@ function RoleRow({ label, roleHash, color, onDone }: RoleRowProps) {
         (err as { shortMessage?: string }).shortMessage ||
         (err as { message?: string }).message
           ? (err as { message?: string }).message?.split("\n")[0]
-          : "Transaction annulée.";
+          : "Transaction failed.";
 
       setFeedback({
         ok: false,
-        msg: `Échec : ${cleanMessage}`,
+        msg: `Failed: ${cleanMessage}`,
       });
     }
   }
@@ -96,14 +96,14 @@ function RoleRow({ label, roleHash, color, onDone }: RoleRowProps) {
         <span className="font-semibold text-slate-800 text-sm">{label}</span>
         {alreadyHasRole && (
           <span className="ml-auto rounded-full border border-green-200 bg-green-100 px-2 py-0.5 text-xs text-green-700">
-            Rôle actif
+            Active Role
           </span>
         )}
       </div>
 
       <input
         type="text"
-        placeholder="0x... adresse du wallet"
+        placeholder="0x... wallet address"
         value={input}
         onChange={(e) => {
           setInput(e.target.value);
@@ -118,7 +118,7 @@ function RoleRow({ label, roleHash, color, onDone }: RoleRowProps) {
       />
 
       {input && !addressValid && (
-        <p className="text-xs text-red-500">Adresse invalide.</p>
+        <p className="text-xs text-red-500">Invalid address.</p>
       )}
 
       <div className="flex gap-2">
@@ -132,7 +132,7 @@ function RoleRow({ label, roleHash, color, onDone }: RoleRowProps) {
           ) : (
             <UserPlus className="h-3.5 w-3.5" />
           )}
-          Assigner
+          Assign
         </button>
         <button
           onClick={() => handle("revokeRole")}
@@ -144,7 +144,7 @@ function RoleRow({ label, roleHash, color, onDone }: RoleRowProps) {
           ) : (
             <UserMinus className="h-3.5 w-3.5" />
           )}
-          Retirer
+          Remove
         </button>
       </div>
 
@@ -177,8 +177,8 @@ export function ManageRoles({ onDone }: { onDone: () => void }) {
   return (
     <div className="space-y-4">
       <p className="text-sm text-slate-500">
-        Saisissez une adresse wallet, puis cliquez sur <strong>Assigner</strong>{" "}
-        pour accorder le rôle ou <strong>Retirer</strong> pour le révoquer.
+        Enter a wallet address, then click <strong>Assign</strong> to grant the
+        role or <strong>Remove</strong> to revoke it.
       </p>
 
       <RoleRow

@@ -12,32 +12,32 @@ const features = [
   {
     icon: Lock,
     title: "Soulbound NFT",
-    desc: "Chaque diplôme est un token ERC-721 non-transférable ancré sur blockchain.",
+    desc: "Each diploma is a non-transferable ERC-721 token anchored on the blockchain.",
   },
   {
     icon: ShieldCheck,
     title: "Multi-Signature",
-    desc: "Chaque lot doit être approuvé par le Doyen ET le Recteur avant l'émission.",
+    desc: "Each batch must be approved by both the Dean AND the Rector before issuance.",
   },
   {
     icon: Globe,
-    title: "Stockage IPFS",
-    desc: "Les PDFs et métadonnées sont stockés sur IPFS via Pinata. Seul le hash est on-chain.",
+    title: "IPFS Storage",
+    desc: "PDFs and metadata are stored on IPFS via Pinata. Only the cryptographic hash is kept on-chain.",
   },
   {
     icon: QrCode,
-    title: "QR de vérification",
-    desc: "Chaque diplôme génère un QR code pour une vérification instantanée d'authenticité.",
+    title: "Verification QR Code",
+    desc: "Each diploma generates a QR code for instant authenticity verification.",
   },
   {
     icon: Cpu,
     title: "Batch Minting",
-    desc: "Des centaines de diplômes émis en une seule transaction blockchain.",
+    desc: "Hundreds of diplomas issued simultaneously in a single blockchain transaction.",
   },
   {
     icon: LayoutDashboard,
-    title: "Tableau de bord admin",
-    desc: "Proposez des lots, signez en tant que Doyen/Recteur, et frappez les NFTs.",
+    title: "Admin Dashboard",
+    desc: "Propose batches, sign as Dean or Rector, and execute the NFT minting.",
   },
 ];
 
@@ -49,31 +49,31 @@ export default function HomePage() {
         <div className="mx-auto max-w-4xl px-6 text-center">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium backdrop-blur">
             <ShieldCheck className="h-4 w-4" />
-            Université de Blida 1 — Département Informatique
+            Université de Blida 1 — Informatique
           </div>
           <h1 className="mb-4 text-4xl font-extrabold leading-tight sm:text-5xl">
             DiploChain
           </h1>
           <p className="mb-2 text-xl font-semibold text-blue-100">
-            Système de délivrance de diplômes haute sécurité
+            High-Security Degree Certification System
           </p>
           <p className="mx-auto mb-10 max-w-2xl text-blue-200">
-            Diplômes infalsifiables basés sur les Soulbound Tokens (ERC-721),
-            gouvernance multi-signatures Doyen + Recteur, stockage IPFS
-            décentralisé.
+            Unforgeable credentials built on Soulbound Tokens (ERC-721), secured
+            by Dean and Rector multi-signature governance, and backed by
+            decentralized IPFS storage.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               href="/admin"
               className="rounded-lg bg-white px-6 py-3 font-semibold text-uni-blue shadow transition hover:bg-blue-50"
             >
-              Tableau de bord Admin
+              Admin Dashboard
             </Link>
             <Link
               href="/verify"
               className="rounded-lg border border-white/40 bg-white/10 px-6 py-3 font-semibold text-white backdrop-blur transition hover:bg-white/20"
             >
-              Vérifier un diplôme
+              Verify a Diploma
             </Link>
           </div>
         </div>
@@ -106,27 +106,27 @@ export default function HomePage() {
       <section className="border-t border-slate-200 bg-slate-100 py-16">
         <div className="mx-auto max-w-4xl px-6 text-center">
           <h2 className="mb-8 text-xl font-bold text-slate-800">
-            Flux de gouvernance
+            Governance Flow
           </h2>
           <div className="flex flex-wrap items-center justify-center gap-2 text-sm font-medium">
             {[
               {
-                label: "Proposé",
+                label: "Proposed",
                 color: "bg-yellow-100 text-yellow-800 border-yellow-200",
               },
               { label: "→", color: "text-slate-400" },
               {
-                label: "Signé — Doyen",
+                label: "Signed — Dean",
                 color: "bg-blue-100 text-blue-800 border-blue-200",
               },
               { label: "→", color: "text-slate-400" },
               {
-                label: "Signé — Recteur",
+                label: "Signed — Rector",
                 color: "bg-purple-100 text-purple-800 border-purple-200",
               },
               { label: "→", color: "text-slate-400" },
               {
-                label: "Diplômes frappés",
+                label: "Diplomas Minted",
                 color: "bg-green-100 text-green-800 border-green-200",
               },
             ].map(({ label, color }, i) =>

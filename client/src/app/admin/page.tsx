@@ -24,7 +24,7 @@ import { cn } from "@/lib/utils";
 
 const ROLE_LABELS: Record<string, { label: string; color: string }> = {
   admin: {
-    label: "Administrateur",
+    label: "admin",
     color: "bg-blue-100 text-blue-800 border-blue-200",
   },
   dean: {
@@ -32,7 +32,7 @@ const ROLE_LABELS: Record<string, { label: string; color: string }> = {
     color: "bg-purple-100 text-purple-800 border-purple-200",
   },
   rector: {
-    label: "Recteur",
+    label: "Recteo",
     color: "bg-amber-100 text-amber-800 border-amber-200",
   },
 };
@@ -122,10 +122,10 @@ export default function AdminPage() {
         </div>
         <div>
           <h1 className="mb-2 text-2xl font-bold text-slate-800">
-            Tableau de bord administratif
+            Admin Dashboard
           </h1>
           <p className="text-slate-500">
-            Connectez votre wallet pour accéder au tableau de bord.
+            connect your wallet to manage diploma batches and issuances.
           </p>
         </div>
         <WalletButton />
@@ -139,7 +139,7 @@ export default function AdminPage() {
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto mb-4"></div>
           <p className="text-sm text-slate-600 font-medium">
-            Vérification des autorisations sur DiploChain...
+            Loading your roles and dashboard data...
           </p>
         </div>
       </div>
@@ -154,11 +154,11 @@ export default function AdminPage() {
         </div>
         <div className="max-w-md w-full">
           <h1 className="mb-2 text-xl font-bold text-slate-800">
-            Accès non autorisé
+            Access Denied
           </h1>
           <p className="text-slate-500 text-sm">
-            Ce wallet ne possède aucun rôle valide (Admin, Doyen, Recteur,
-            Conseil) sur le contrat.
+            This wallet does not have any valid roles (Admin, Dean, Rector) on
+            the contract.
           </p>
           <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50 p-3 text-left text-xs font-mono text-slate-500 space-y-1">
             <p>
@@ -184,9 +184,9 @@ export default function AdminPage() {
       {/* Header */}
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Tableau de bord</h1>
+          <h1 className="text-2xl font-bold text-slate-900">Admin Dashboard</h1>
           <p className="mt-1 text-sm text-slate-500">
-            Gérez les lots de diplômes — proposez, signez et frappez les NFTs.
+            Manage diploma batches — propose, sign,session, and mint the NFTs.
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -196,17 +196,17 @@ export default function AdminPage() {
             </span>
           ))}
           <button onClick={handleRefresh} className="btn-secondary text-xs">
-            <RefreshCw className="h-3.5 w-3.5" /> Actualiser
+            <RefreshCw className="h-3.5 w-3.5" /> Refresh
           </button>
         </div>
       </div>
 
       {/* Stats */}
       <div className="grid gap-4 sm:grid-cols-3">
-        <StatCard label="Lots totaux" value={totalBatches} />
-        <StatCard label="Diplômes émis" value={totalTokens} />
+        <StatCard label="Total Batches" value={totalBatches} />
+        <StatCard label="Total Tokens" value={totalTokens} />
         <StatCard
-          label="Contrat"
+          label="Contract"
           value={CONTRACT_ADDRESS.slice(0, 10) + "…"}
           mono
         />
@@ -221,10 +221,10 @@ export default function AdminPage() {
           >
             <div className="flex items-center gap-2 font-semibold text-slate-800">
               <Users className="h-5 w-5 text-purple-500" />
-              Gérer les rôles — Doyen &amp; Recteur
+              Manage Roles — Dean &amp; Rector
             </div>
             <span className="text-xs text-slate-400">
-              {showRoles ? "Fermer ▲" : "Ouvrir ▼"}
+              {showRoles ? "Close ▲" : "Open ▼"}
             </span>
           </button>
           {showRoles && (
@@ -244,10 +244,10 @@ export default function AdminPage() {
           >
             <div className="flex items-center gap-2 font-semibold text-slate-800">
               <Plus className="h-5 w-5 text-uni-blue" />
-              Proposer un nouveau lot
+              Propose a New Batch
             </div>
             <span className="text-xs text-slate-400">
-              {showForm ? "Fermer ▲" : "Ouvrir ▼"}
+              {showForm ? "Close ▲" : "Open ▼"}
             </span>
           </button>
           {showForm && (
@@ -272,10 +272,10 @@ export default function AdminPage() {
           >
             <div className="flex items-center gap-2 font-semibold text-slate-800">
               <FileText className="h-5 w-5 text-emerald-500" />
-              Initialiser une délibération
+              Initialize a Deliberation
             </div>
             <span className="text-xs text-slate-400">
-              {showDeliberation ? "Fermer ▲" : "Ouvrir ▼"}
+              {showDeliberation ? "Close ▲" : "Open ▼"}
             </span>
           </button>
           {showDeliberation && (
@@ -293,13 +293,13 @@ export default function AdminPage() {
       {/* Batch list */}
       <div>
         <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-400">
-          Lots ({totalBatches})
+          Batches ({totalBatches})
         </h2>
         {totalBatches === 0 ? (
           <div className="card py-12 text-center text-slate-400">
             <Loader2 className="mx-auto mb-2 h-6 w-6 animate-spin opacity-30" />
             <p className="text-sm">
-              Aucun lot encore. Proposez le premier ci-dessus.
+              No batches yet. Propose the first one above.
             </p>
           </div>
         ) : (

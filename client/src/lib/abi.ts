@@ -537,6 +537,19 @@ export const DIPLOMA_ABI = [
   },
   {
     inputs: [],
+    name: "EXPECTED_CREDITS",
+    outputs: [
+      {
+        internalType: "uint16",
+        name: "",
+        type: "uint16",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "MAX_BATCH_SIZE",
     outputs: [
       {
@@ -582,19 +595,6 @@ export const DIPLOMA_ABI = [
         internalType: "bytes32",
         name: "",
         type: "bytes32",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "REQUIRED_CREDITS",
-    outputs: [
-      {
-        internalType: "uint16",
-        name: "",
-        type: "uint16",
       },
     ],
     stateMutability: "view",

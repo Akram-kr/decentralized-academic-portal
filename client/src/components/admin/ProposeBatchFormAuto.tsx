@@ -14,7 +14,7 @@ interface StudentRow {
   matricule: string;
   wallet: string;
   studentName: string;
-  department: string;
+  speciality: "AI" | "SIQ" | "ISIL" | "Reseau";
   graduationYear: number;
   totalCredits: number | null;
   pfeNote: number | null;
@@ -32,7 +32,7 @@ const emptyRow = (): StudentRow => ({
   matricule: "",
   wallet: "",
   studentName: "",
-  department: "Informatique",
+  speciality: "SIQ",
   graduationYear: new Date().getFullYear(),
   totalCredits: null,
   pfeNote: null,
@@ -81,7 +81,7 @@ export function ProposeBatchFormAuto({ onSuccess }: Props) {
               wallet: row.wallet,
               studentName: row.studentName,
               matricule: row.matricule,
-              department: row.department,
+              speciality: row.speciality,
               graduationYear: row.graduationYear,
               totalCredits: row.totalCredits ?? 0,
               pfeNote: row.pfeNote ?? 0,
@@ -107,7 +107,8 @@ export function ProposeBatchFormAuto({ onSuccess }: Props) {
       matricule,
       wallet: "",
       studentName: "",
-      department: "Informatique",
+
+      speciality: "SIQ",
       graduationYear: new Date().getFullYear(),
       totalCredits: null,
       pfeNote: null,
@@ -129,14 +130,14 @@ export function ProposeBatchFormAuto({ onSuccess }: Props) {
       const profile = await getStudentBatchProfile(normalizedMatricule);
 
       if (!profile) {
-        throw new Error("Aucun étudiant trouvé pour ce matricule.");
+        throw new Error("No student found for this matricule.");
       }
 
       update(rowId, {
         matricule: profile.matricule,
         wallet: profile.wallet,
         studentName: profile.studentName,
-        department: profile.department,
+        speciality: profile.speciality,
         graduationYear: profile.graduationYear,
         totalCredits: profile.totalCredits,
         pfeNote: profile.pfeNote,
@@ -149,7 +150,7 @@ export function ProposeBatchFormAuto({ onSuccess }: Props) {
       setGlobalError(
         error instanceof Error
           ? error.message
-          : "Impossible de charger le profil étudiant.",
+          : "Failed to load student profile.",
       );
     }
   };
@@ -171,7 +172,7 @@ export function ProposeBatchFormAuto({ onSuccess }: Props) {
       const profileReady =
         Boolean(row.wallet) &&
         Boolean(row.studentName) &&
-        Boolean(row.department) &&
+        Boolean(row.speciality) &&
         row.graduationYear > 1900 &&
         row.totalCredits !== null &&
         row.totalCredits >= 0 && // Changed from > 0 to >= 0 to allow 0 credits
@@ -183,7 +184,7 @@ export function ProposeBatchFormAuto({ onSuccess }: Props) {
 
     if (!allReady) {
       setGlobalError(
-        "Veuillez charger le profil du matricule avant de proposer le lot.",
+        "Please load the student profile before submitting the batch.",
       );
       return;
     }
@@ -194,7 +195,7 @@ export function ProposeBatchFormAuto({ onSuccess }: Props) {
         wallet: row.wallet as `0x${string}`,
         studentName: row.studentName,
         matricule: row.matricule,
-        department: row.department,
+        speciality: row.speciality,
         graduationYear: BigInt(row.graduationYear),
         totalCredits: BigInt(row.totalCredits as number),
         pfeNote: BigInt(row.pfeNote as number),
@@ -216,18 +217,15 @@ export function ProposeBatchFormAuto({ onSuccess }: Props) {
             // This UNFREEZES the button if you cancel or if there's a contract revert
             setSubmitStep("idle");
             setGlobalError(
-              "Échec de la transaction : " +
-                (error.message.split("\n")[0] || "Annulée par l'utilisateur."),
+              "Failed to submit transaction: " +
+                (error.message || "Cancelled by user."),
             );
           },
         },
       );
     } catch (err) {
-      console.error("Data formatting error:", err);
       setSubmitStep("idle");
-      setGlobalError(
-        "Erreur lors de la préparation des données pour le contrat.",
-      );
+      setGlobalError("Error occurred while preparing data for the contract.");
     }
   };
 
@@ -236,8 +234,7 @@ export function ProposeBatchFormAuto({ onSuccess }: Props) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-xs text-blue-700">
-        <strong>PDF auto-généré à la finalisation.</strong> Aucun upload
-        n&apos;est requis au moment de la proposition.
+        <strong>PDF auto-generated at finalization.</strong>
       </div>
 
       <div>
@@ -264,15 +261,15 @@ export function ProposeBatchFormAuto({ onSuccess }: Props) {
           >
             <div className="flex items-center justify-between">
               <span className="flex items-center gap-2 text-xs font-semibold text-slate-500">
-                Étudiant #{index + 1}
+                Student #{index + 1}
                 {row.status === "loading" && (
                   <span className="flex items-center gap-1 text-violet-600">
                     <Loader2 className="h-3 w-3 animate-spin" />
-                    Chargement…
+                    Loading…
                   </span>
                 )}
                 {row.status === "error" && (
-                  <span className="text-red-600">✗ Erreur</span>
+                  <span className="text-red-600">✗ Error</span>
                 )}
               </span>
               <button
@@ -297,8 +294,8 @@ export function ProposeBatchFormAuto({ onSuccess }: Props) {
                 required
               />
               <p className="mt-1 text-[11px] text-slate-500">
-                Le profil étudiant est chargé depuis Prisma après validation du
-                matricule.
+                Enter the student&apos;s matricule and load their profile before
+                submitting the batch.
               </p>
             </div>
 
@@ -306,7 +303,7 @@ export function ProposeBatchFormAuto({ onSuccess }: Props) {
               <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
                 <div>
                   <p className="text-[11px] uppercase tracking-wide text-slate-400">
-                    Nom complet
+                    Full name
                   </p>
                   <p className="font-medium text-slate-800">
                     {row.studentName || "—"}
@@ -322,15 +319,15 @@ export function ProposeBatchFormAuto({ onSuccess }: Props) {
                 </div>
                 <div>
                   <p className="text-[11px] uppercase tracking-wide text-slate-400">
-                    Département
+                    Speciality
                   </p>
                   <p className="font-medium text-slate-800">
-                    {row.department || "—"}
+                    {row.speciality || "—"}
                   </p>
                 </div>
                 <div>
                   <p className="text-[11px] uppercase tracking-wide text-slate-400">
-                    Année de promotion
+                    Graduation Year
                   </p>
                   <p className="font-medium text-slate-800">
                     {row.graduationYear || "—"}
@@ -338,7 +335,7 @@ export function ProposeBatchFormAuto({ onSuccess }: Props) {
                 </div>
                 <div>
                   <p className="text-[11px] uppercase tracking-wide text-slate-400">
-                    Crédits
+                    Total Credits
                   </p>
                   <p className="font-medium text-slate-800">
                     {row.totalCredits ?? "—"}
@@ -346,7 +343,7 @@ export function ProposeBatchFormAuto({ onSuccess }: Props) {
                 </div>
                 <div>
                   <p className="text-[11px] uppercase tracking-wide text-slate-400">
-                    Note PFE
+                    Final Project Note
                   </p>
                   <p className="font-medium text-slate-800">
                     {row.pfeNote !== null
@@ -369,7 +366,8 @@ export function ProposeBatchFormAuto({ onSuccess }: Props) {
       {submitStep === "proposing" && (
         <div className="flex items-center gap-2 rounded-lg border border-blue-200 bg-blue-50 p-3 text-sm text-blue-700">
           <Loader2 className="h-4 w-4 animate-spin" />
-          Proposition du lot sur la blockchain…
+          Proposing batch on the blockchain. Please confirm the transaction in
+          your wallet.
         </div>
       )}
 
@@ -379,7 +377,7 @@ export function ProposeBatchFormAuto({ onSuccess }: Props) {
           onClick={addRow}
           className="btn-secondary text-xs"
         >
-          <Upload className="h-4 w-4" /> Ajouter un étudiant
+          <Upload className="h-4 w-4" /> add student
         </button>
 
         <button
@@ -393,14 +391,14 @@ export function ProposeBatchFormAuto({ onSuccess }: Props) {
             <Upload className="h-4 w-4" />
           )}
           {submitStep === "proposing"
-            ? "Proposition en cours…"
-            : "Proposer le lot"}
+            ? "Proposing in progress…"
+            : "Submit Batch"}
         </button>
       </div>
 
       {txHash && (
         <p className="rounded bg-green-50 p-2 font-mono text-xs text-green-700 truncate">
-          ✓ Transaction proposeBatch : {txHash}
+          ✓ Transaction submitted: {txHash}
         </p>
       )}
     </form>

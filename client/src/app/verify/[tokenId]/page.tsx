@@ -174,9 +174,7 @@ export default function VerifyTokenPage({ params }: Props) {
       } catch {
         if (!active) return;
 
-        setResolveError(
-          `"${input}" introuvable. Vérifiez que le matricule est valide et que le diplôme a bien été finalisé.`,
-        );
+        setResolveError(`"${input}" not found as  matricule on this contract.`);
         setIsResolving(false);
       }
     };
@@ -230,7 +228,7 @@ export default function VerifyTokenPage({ params }: Props) {
           href="/verify"
           className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition"
         >
-          <ArrowLeft className="h-4 w-4" /> Retour à la recherche
+          <ArrowLeft className="h-4 w-4" /> Back to Search
         </Link>
 
         {diploma && isAdmin && diploma.valid && (
@@ -239,7 +237,7 @@ export default function VerifyTokenPage({ params }: Props) {
             className="inline-flex items-center gap-1.5 rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-700 hover:bg-red-100 transition"
           >
             <ShieldAlert className="h-3.5 w-3.5" />
-            Révoquer ce diplôme
+            Revoke this diploma
           </button>
         )}
       </div>
@@ -247,7 +245,7 @@ export default function VerifyTokenPage({ params }: Props) {
       {displayLoading && (
         <div className="card flex flex-col items-center gap-4 py-16 text-slate-400">
           <Loader2 className="h-8 w-8 animate-spin" />
-          <p className="text-sm">Lecture du contrat intelligent…</p>
+          <p className="text-sm">Loading smart contract…</p>
         </div>
       )}
 
@@ -257,8 +255,8 @@ export default function VerifyTokenPage({ params }: Props) {
           <div className="text-center">
             <p className="font-semibold">{displayError}</p>
             <p className="text-sm text-red-400 mt-1">
-              Le token {rawId} n&apos;existe pas ou le contrat n&apos;est pas
-              disponible.
+              The token or the student id {rawId} does not exist or the contract
+              is not available. disponible.
             </p>
           </div>
           <Link href="/verify" className="btn-secondary text-sm">
@@ -288,7 +286,7 @@ export default function VerifyTokenPage({ params }: Props) {
             <div className="flex items-start justify-between">
               <div>
                 <h2 className="text-base font-bold text-slate-900">
-                  Révoquer le diplôme
+                  Revoke Diploma
                 </h2>
                 <p className="text-xs text-slate-500 mt-0.5">
                   Token #{resolvedTokenId?.toString() ?? rawId}
@@ -304,13 +302,13 @@ export default function VerifyTokenPage({ params }: Props) {
 
             <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-xs text-red-700">
               <ShieldAlert className="inline h-3.5 w-3.5 mr-1" />
-              Cette action est <strong>irréversible</strong>. Le diplôme sera
-              marqué révoqué sur la blockchain.
+              This action is <strong>irreversible</strong>. The diploma will be
+              marked as revoked on the blockchain.
             </div>
 
             <div>
               <label className="label">
-                Motif de révocation <span className="text-red-500">*</span>
+                Revoke Reason <span className="text-red-500">*</span>
               </label>
               <textarea
                 className="input min-h-[80px] resize-none"
@@ -326,7 +324,7 @@ export default function VerifyTokenPage({ params }: Props) {
                 className="btn-secondary text-sm"
                 disabled={revokeLoading}
               >
-                Annuler
+                Cancel
               </button>
               <button
                 onClick={handleRevokeConfirm}

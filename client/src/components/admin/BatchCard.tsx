@@ -253,17 +253,17 @@ export function BatchCard({ batchId, onUpdate }: BatchCardProps) {
       };
 
       if (!response.ok) {
-        throw new Error(payload.error ?? "La génération des PDF a échoué.");
+        throw new Error(payload.error ?? "finalisation failed.");
       }
 
       if (!payload.cids?.length) {
-        throw new Error("Aucun CID IPFS n'a été retourné.");
+        throw new Error("No IPFS CIDs returned.");
       }
 
       writeContract({
         ...diplomaContract,
         functionName: "finalizeBatch",
-        args: [batchId, payload.cids], // Or just [batchId] if your contract resolves metadata differently
+        args: [batchId, payload.cids],
       });
 
       // Lower the local setup loader since wagmi's `isPending` will take over tracking the transaction signature
@@ -274,11 +274,9 @@ export function BatchCard({ batchId, onUpdate }: BatchCardProps) {
       const err = error as { shortMessage?: string; message?: string };
       const cleanMessage =
         err.shortMessage ||
-        (err.message
-          ? err.message.split("\n")[0]
-          : "La finalisation du lot a échoué.");
+        (err.message ? err.message.split("\n")[0] : "finalisation failed.");
 
-      setFinalizeError(`Échec : ${cleanMessage}`);
+      setFinalizeError(`failed : ${cleanMessage}`);
       setIsPreparingFinalization(false);
     }
   };
@@ -305,7 +303,7 @@ export function BatchCard({ batchId, onUpdate }: BatchCardProps) {
           ? err.message.split("\n")[0]
           : `L'action ${action} a échoué.`);
 
-      setFinalizeError(`Échec : ${cleanMessage}`);
+      setFinalizeError(`failed : ${cleanMessage}`);
     }
   };
   const handleCancelConfirm = () => {
@@ -328,7 +326,7 @@ export function BatchCard({ batchId, onUpdate }: BatchCardProps) {
           ? err.message.split("\n")[0]
           : "L'annulation du lot a échoué.");
 
-      setFinalizeError(`Échec : ${cleanMessage}`);
+      setFinalizeError(`failed : ${cleanMessage}`);
     }
   };
 
@@ -338,15 +336,15 @@ export function BatchCard({ batchId, onUpdate }: BatchCardProps) {
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1 min-w-0">
             <p className="text-xs text-slate-400 font-mono mb-1">
-              Lot #{batchId.toString()}
+              set #{batchId.toString()}
             </p>
             <p className="font-semibold text-slate-800 leading-snug">
-              Lot de diplômes
+              deploma set
             </p>
             <p className="mt-1 text-xs text-slate-500">
               {batchState.proposer
-                ? `Proposé par ${shortenAddress(batchState.proposer)}`
-                : "Chargement du proposer…"}
+                ? `Proposed by ${shortenAddress(batchState.proposer)}`
+                : "Loading proposed…"}
             </p>
           </div>
 
@@ -357,7 +355,7 @@ export function BatchCard({ batchId, onUpdate }: BatchCardProps) {
               </span>
             ) : (
               <span className="badge bg-slate-100 text-slate-600 border-slate-200">
-                Chargement…
+                Loading…
               </span>
             )}
           </div>
@@ -366,14 +364,14 @@ export function BatchCard({ batchId, onUpdate }: BatchCardProps) {
         <div className="flex items-center gap-1.5 text-sm text-slate-500">
           <Users className="h-4 w-4" />
           {batchState.studentCount !== null
-            ? `${batchState.studentCount.toString()} étudiants`
-            : "Chargement…"}
+            ? `${batchState.studentCount.toString()} students`
+            : "Loading…"}
         </div>
 
         {batchState.cancelReason && (
           <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-xs text-red-700 flex items-start gap-2">
             <AlertTriangle className="h-3.5 w-3.5 shrink-0 mt-0.5" />
-            <span>Motif : {batchState.cancelReason}</span>
+            <span>Reason : {batchState.cancelReason}</span>
           </div>
         )}
 
@@ -389,7 +387,7 @@ export function BatchCard({ batchId, onUpdate }: BatchCardProps) {
               ) : (
                 <CheckCircle className="h-3 w-3" />
               )}
-              Signer (Doyen)
+              Sign (Dean)
             </button>
           )}
 
@@ -404,7 +402,7 @@ export function BatchCard({ batchId, onUpdate }: BatchCardProps) {
               ) : (
                 <CheckCircle className="h-3 w-3" />
               )}
-              Signer (Recteur)
+              Sign (Rector)
             </button>
           )}
 
@@ -419,7 +417,7 @@ export function BatchCard({ batchId, onUpdate }: BatchCardProps) {
               ) : (
                 <CheckCircle className="h-3 w-3" />
               )}
-              Finaliser le lot
+              finalize batch
             </button>
           )}
 
@@ -436,7 +434,7 @@ export function BatchCard({ batchId, onUpdate }: BatchCardProps) {
               onClick={() => setShowCancelModal(true)}
             >
               <X className="h-3 w-3" />
-              Annuler
+              Cancel
             </button>
           )}
         </div>
@@ -459,11 +457,9 @@ export function BatchCard({ batchId, onUpdate }: BatchCardProps) {
           <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-2xl space-y-4">
             <div className="flex items-start justify-between">
               <div>
-                <h2 className="text-base font-bold text-slate-900">
-                  Annuler le lot
-                </h2>
+                <h2 className="text-base font-bold text-slate-900">Cancel</h2>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  Lot #{batchId.toString()}
+                  Batch #{batchId.toString()}
                 </p>
               </div>
               <button
@@ -482,7 +478,7 @@ export function BatchCard({ batchId, onUpdate }: BatchCardProps) {
 
             <div>
               <label className="label">
-                Motif d&apos;annulation <span className="text-red-500">*</span>
+                Cancel Reason <span className="text-red-500">*</span>
               </label>
               <textarea
                 className="input min-h-[80px] resize-none"
@@ -498,7 +494,7 @@ export function BatchCard({ batchId, onUpdate }: BatchCardProps) {
                 className="btn-secondary text-sm"
                 disabled={loading}
               >
-                Fermer
+                close
               </button>
               <button
                 onClick={handleCancelConfirm}

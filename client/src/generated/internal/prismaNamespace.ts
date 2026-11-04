@@ -829,7 +829,8 @@ export const StudentScalarFieldEnum = {
   graduationYear: 'graduationYear',
   currentYear: 'currentYear',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  speciality: 'speciality'
 } as const
 
 export type StudentScalarFieldEnum = (typeof StudentScalarFieldEnum)[keyof typeof StudentScalarFieldEnum]
@@ -971,6 +972,20 @@ export type EnumYearLevelFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
  * Reference to a field of type 'YearLevel[]'
  */
 export type ListEnumYearLevelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'YearLevel[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Speciality'
+ */
+export type EnumSpecialityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Speciality'>
+    
+
+
+/**
+ * Reference to a field of type 'Speciality[]'
+ */
+export type ListEnumSpecialityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Speciality[]'>
     
 
 

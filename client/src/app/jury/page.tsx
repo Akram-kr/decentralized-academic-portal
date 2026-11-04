@@ -7,6 +7,7 @@ import {
   useWriteContract,
 } from "wagmi";
 import { parseAbiItem } from "viem";
+import { ConfirmGradeModal } from "@/components/jury/ConfirmGradeModal";
 import {
   Loader2,
   ShieldCheck,
@@ -89,21 +90,21 @@ function normalizeAddress(value: string) {
 
 function validateGrade(criterion: GradeCriterion, value: string) {
   if (value.trim() === "") {
-    return "La note est requise.";
+    return "note is  required";
   }
 
   const parsed = Number(value);
 
   if (!Number.isFinite(parsed) || !Number.isInteger(parsed)) {
-    return "La note doit être un entier.";
+    return "The grade must be an integer.";
   }
 
   if (parsed < 0) {
-    return "La note doit être supérieure ou égale à 0.";
+    return "The grade must be a positive number.";
   }
 
   if (parsed > GRADE_LIMITS[criterion]) {
-    return `La note doit être inférieure ou égale à ${GRADE_LIMITS[criterion]}.`;
+    return `The grade must be less than or equal to ${GRADE_LIMITS[criterion]}.`;
   }
 
   return "";
@@ -363,6 +364,7 @@ export default function JuryPage() {
   const [gradeInputs, setGradeInputs] = useState<Record<string, GradeInputs>>(
     {},
   );
+  const [pendingSessionId, setPendingSessionId] = useState<bigint | null>(null);
 
   const deliberationAddress = PFE_DELIBERATION_ADDRESS as
     | `0x${string}`
@@ -396,7 +398,7 @@ export default function JuryPage() {
       setError(
         refreshError instanceof Error
           ? refreshError.message
-          : "Impossible de charger les sessions de délibération.",
+          : "Failed to load deliberation sessions.",
       );
       setSessions([]);
     } finally {
@@ -478,7 +480,7 @@ export default function JuryPage() {
   const onSubmitGrade = useCallback(
     async (sessionId: bigint) => {
       if (!deliberationAddress) {
-        setError("Adresse du contrat de délibération non configurée.");
+        setError("Deliberation contract not configured.");
         return;
       }
 
@@ -525,7 +527,7 @@ export default function JuryPage() {
             : "Annulée par l'utilisateur.";
 
         // 3. Display it in the error box
-        setError(`Échec : ${customMessage}`);
+        setError(`Failed: ${customMessage}`);
       }
     },
     [deliberationAddress, gradeInputs, writeContractAsync],
@@ -539,10 +541,10 @@ export default function JuryPage() {
             <ShieldCheck className="h-8 w-8" />
           </div>
         </div>
-        <h1 className="text-2xl font-bold text-slate-900">Espace jury</h1>
+        <h1 className="text-2xl font-bold text-slate-900">jury space</h1>
         <p className="text-slate-500">
-          Connectez votre wallet MetaMask pour voir les sessions qui vous sont
-          assignées et soumettre vos notes.
+          Connect your MetaMask wallet to view the sessions assigned to you and
+          submit your grades.
         </p>
         <WalletButton />
       </div>
@@ -554,13 +556,13 @@ export default function JuryPage() {
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="text-sm font-semibold text-uni-blue">
-            Délibération PFE
+            PFE Deliberation
           </p>
-          <h1 className="text-2xl font-bold text-slate-900">Tableau jury</h1>
+          <h1 className="text-2xl font-bold text-slate-900">Jury Dashboard</h1>
           <p className="mt-2 text-sm text-slate-500">
-            Les sessions vous sont attribuées automatiquement à partir de la
-            blockchain. Lorsque les 4 jurys ont voté, le contrat calcule la note
-            finale et la verrouille.
+            The sessions are automatically assigned to you from the blockchain.
+            When all 4 jurors have voted, the contract calculates the final
+            grade and locks it. finale et la verrouille.
           </p>
         </div>
         <button
@@ -570,7 +572,7 @@ export default function JuryPage() {
           disabled={loadingSessions}
         >
           <RefreshCw className="h-4 w-4" />
-          Rafraîchir
+          refresh
         </button>
       </div>
 
@@ -579,22 +581,22 @@ export default function JuryPage() {
           <div className="flex items-center gap-2">
             <AlertCircle className="h-5 w-5" />
             <p className="font-semibold">
-              Contrat de délibération non configuré.
+              Deliberation contract not configured.
             </p>
           </div>
           <p className="mt-2 text-sm">
-            Ajoutez{" "}
+            Add{" "}
             <span className="font-mono">
               NEXT_PUBLIC_DELIBERATION_CONTRACT_ADDRESS
             </span>{" "}
-            dans votre fichier <span className="font-mono">.env.local</span>.
+            to your <span className="font-mono">.env.local</span> file.
           </p>
         </div>
       )}
 
       {error && (
         <div className="card border-red-200 bg-red-50 text-red-700">
-          <p className="font-semibold">Erreur</p>
+          <p className="font-semibold">Error</p>
           <p className="mt-1 text-sm">{error}</p>
         </div>
       )}
@@ -602,12 +604,11 @@ export default function JuryPage() {
       {loadingSessions ? (
         <div className="card flex items-center justify-center gap-3 text-slate-500">
           <Loader2 className="h-5 w-5 animate-spin" />
-          Chargement des sessions assignées…
+          Loading your sessions…
         </div>
       ) : sessions.length === 0 ? (
         <div className="card text-center text-slate-500">
-          Aucune session de délibération assignée à ce wallet pour
-          l&apos;instant.
+          No deliberation sessions assigned to this wallet at the moment.
         </div>
       ) : (
         <div className="space-y-4">
@@ -626,11 +627,22 @@ export default function JuryPage() {
                 onGradeChange={(criterion, value) =>
                   handleGradeChange(session.sessionId, criterion, value)
                 }
-                onSubmit={() => void onSubmitGrade(session.sessionId)}
+                onSubmit={() => setPendingSessionId(session.sessionId)}
               />
             );
           })}
         </div>
+      )}
+      {pendingSessionId !== null && (
+        <ConfirmGradeModal
+          inputs={gradeInputs[pendingSessionId.toString()] ?? EMPTY_GRADE}
+          onCancel={() => setPendingSessionId(null)}
+          onConfirm={() => {
+            const id = pendingSessionId;
+            setPendingSessionId(null);
+            void onSubmitGrade(id);
+          }}
+        />
       )}
     </div>
   );

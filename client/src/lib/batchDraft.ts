@@ -2,7 +2,7 @@ export interface BatchDraftStudent {
   wallet: string;
   studentName: string;
   matricule: string;
-  department: string;
+  speciality: "AI" | "SIQ" | "ISIL" | "Reseau";
   graduationYear: bigint;
   totalCredits: bigint;
   pfeNote: bigint;

@@ -82,9 +82,9 @@ export function ProposeBatchFormAuto({ onSuccess }: Props) {
               studentName: row.studentName,
               matricule: row.matricule,
               speciality: row.speciality,
-              graduationYear: row.graduationYear,
-              totalCredits: row.totalCredits ?? 0,
-              pfeNote: row.pfeNote ?? 0,
+              graduationYear: BigInt(row.graduationYear),
+              totalCredits: BigInt(row.totalCredits ?? 0),
+              pfeNote: BigInt(row.pfeNote ?? 0),
             })),
           );
         }
@@ -195,10 +195,10 @@ export function ProposeBatchFormAuto({ onSuccess }: Props) {
         wallet: row.wallet as `0x${string}`,
         studentName: row.studentName,
         matricule: row.matricule,
-        speciality: row.speciality,
-        graduationYear: BigInt(row.graduationYear),
-        totalCredits: BigInt(row.totalCredits as number),
-        pfeNote: BigInt(row.pfeNote as number),
+        department: row.speciality, // Rename speciality -> department
+        graduationYear: Number(row.graduationYear), // Convert bigint -> number
+        totalCredits: Number(row.totalCredits), // Convert bigint -> number
+        pfeNote: Number(row.pfeNote), // Convert bigint -> number
         ipfsCID: "",
       }));
 

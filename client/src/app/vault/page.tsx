@@ -196,7 +196,7 @@ export default function VaultPage() {
         abi: FILE_STORAGE_ABI,
         functionName: "getUserFiles",
         account: address,
-      });
+      } as Parameters<typeof publicClient.readContract>[0]);
       return (res as VaultFile[]).map((f, i) => ({ ...f, index: i }));
     },
   });
@@ -207,12 +207,12 @@ export default function VaultPage() {
     enabled: !!address && !!publicClient,
     queryFn: async () => {
       if (!address || !publicClient) return BigInt(1024 * 1024 * 1024);
-      return publicClient.readContract({
+      return (await (publicClient.readContract as any)({
         address: FILE_STORAGE_ADDRESS,
         abi: FILE_STORAGE_ABI,
         functionName: "getRemainingStorage",
         account: address,
-      }) as Promise<bigint>;
+      })) as bigint;
     },
   });
 
@@ -261,7 +261,7 @@ export default function VaultPage() {
 
         setStage("confirming");
         const txHash = await writeContractAsync({
-          address: FILE_STORAGE_ADDRESS,
+          address: FILE_STORAGE_ADDRESS as `0x${string}`,
           abi: FILE_STORAGE_ABI,
           functionName: "uploadFile",
           args: [[c0, c1, c2], file.name, ext, BigInt(file.size), iv, hash],
@@ -322,7 +322,7 @@ export default function VaultPage() {
   const deleteFile = useCallback(
     async (index: number) => {
       const tx = await writeContractAsync({
-        address: FILE_STORAGE_ADDRESS,
+        address: FILE_STORAGE_ADDRESS as `0x${string}`,
         abi: FILE_STORAGE_ABI,
         functionName: "deleteFile",
         args: [BigInt(index)],
@@ -338,7 +338,7 @@ export default function VaultPage() {
   const doRename = useCallback(async () => {
     if (renaming === null || !newName.trim()) return;
     const tx = await writeContractAsync({
-      address: FILE_STORAGE_ADDRESS,
+      address: FILE_STORAGE_ADDRESS as `0x${string}`,
       abi: FILE_STORAGE_ABI,
       functionName: "renameFile",
       args: [BigInt(renaming), newName.trim()],
@@ -369,13 +369,13 @@ export default function VaultPage() {
       {/* Header */}
       <div className="animate-fade-up">
         <p className="font-mono text-[10px] text-gold tracking-widest mb-1">
-          // COFFRE CHIFFRÉ
+          COFFRE CHIFFRE
         </p>
         <h1 className="font-serif text-3xl font-bold text-t1">
           Coffre de Documents
         </h1>
         <p className="font-mono text-[11px] text-t2 mt-2">
-          Stockage chiffré E2E · 3 fragments IPFS · Hash d'intégrité on-chain
+          Stockage chiffré E2E · 3 fragments IPFS · Hash dintégrité on-chain
         </p>
       </div>
 
